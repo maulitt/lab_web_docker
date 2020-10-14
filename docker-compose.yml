@@ -5,3 +5,7 @@ services:
     build: .
     ports:
       - 3000:3000
+  db:
+    image: posgres
+    environment:
+      POSTGRES_PASSWORD: qwerty
