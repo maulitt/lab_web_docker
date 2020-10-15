@@ -3,9 +3,13 @@ version: '3'
 services:
   web_app:
     build: .
+    command: node index.js
     ports:
       - 3000:3000
   db:
-    image: posgres
+    image: postgres
+    restart: always
     environment:
-      POSTGRES_PASSWORD: qwerty
+      - POSTGRES_PASSWORD=qwerty
+      - POSTGRES_USER=regina
+      - POSTGRES_DB=users
