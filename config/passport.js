@@ -3,7 +3,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const CookieStrategy = require('passport-cookie').Strategy;
 const sequelize = require('../for_sequelize').sequelize;
 const Sequelize = require('sequelize');
-const User = require('../models/user')(Sequelize, sequelize);
+const User = require('../models/user')(sequelize, Sequelize);
 const argon2 = require('argon2');
 
 
