@@ -10,6 +10,7 @@ const fs = require('fs');
 const cookieSession = require('cookie-session');
 const cookieParser = require('cookie-parser');
 require('passport-local');
+const connecting = require('./for_sequelize').connecting;
 
 
 app.use(flash());
@@ -22,18 +23,84 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
+
 app.set('view engine', 'hbs');
 app.set('views', 'views');
 hbs.registerPartials(__dirname+'/views/partials')
 
+
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get('/', (req, res) => {
-    res.send('Hello, i\'m so fucking scared');
+
+
+app.get('/registration', function (req, res) {
+    //const flesh = req.flash();
+    res.render('registration.hbs', { message: req.flash('error')});
 })
+app.get('/signin', function (req, res) {
+    res.render('signin.hbs');
+    console.log(req.flash());
+})
+app.get('/logout', function(req, res) {
+    req.logout();
+    res.redirect('/');
+})
+//регистрация новых людей
+app.post('/registration', passport.authenticate('registration', { successRedirect: '/',
+    failureRedirect: '/registration', failureFlash: true }))
+
+
+//сайн-ин старых людей
+app.post('/signin', passport.authenticate('local', { successRedirect: '/', failureRedirect: '/signin',
+    failureFlash: true }))
+
+
+//всякие обработчики маршрутов
+app.get('/', function (req, res) {
+    res.render('mainpage.hbs', {
+        title: 'Главная страница приложения',
+        name: 'Регины'
+    })
+})
+
+
+
+//мидлвари для ошибок
+app.use(function(req, res, next) {       // ошибка 404 обрабатывается по-особенному 0_о
+    const err = new Error('Not Found');
+    err.statusCode = 404;
+    res.send('What?');
+    next(err);
+});
+
+app.use(function(err, req, res, next) {
+    console.error(err.message);
+    if (!err.statusCode) err.statusCode = 500;  //  если нет какого-то кода, то это 500
+    res.status(err.statusCode).send(err.message);
+    next(err);
+})
+
+app.use(function (err, req, res, next) {
+    let now = Date();
+    fs.appendFile('logging.txt', 'Error '+ now, function(err) {
+        if (err)
+        {
+            console.log('failed to save in log');
+            throw err;
+        }
+        console.log('(saved to log)');
+    });
+})
+
+
 
 
 app.listen(PORT,() => {
     console.log('server zapushen');
+    connecting().then(() => {
+        console.log('connected database');
+    }).catch((err) => {
+        console.log(err);
+    });
 } );

@@ -1,10 +1,11 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const CookieStrategy = require('passport-cookie').Strategy;
-const mongoose = require('mongoose');
-const User = require('../models/user')(sequelize, sequelize.DataTypes);
+const sequelize = require('../for_sequelize').sequelize;
+const Sequelize = require('sequelize');
+const User = require('../models/user')(Sequelize, sequelize);
 const argon2 = require('argon2');
-const sequelize = require("sequelize");
+
 
 //для проверки старых пользователей (из документации)
 passport.use('local',new LocalStrategy({
