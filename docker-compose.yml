@@ -13,3 +13,5 @@ services:
       - POSTGRES_PASSWORD=qwerty
       - POSTGRES_USER=regina
       - POSTGRES_DB=users
+    ports:
+      - 5432:5432
