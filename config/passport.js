@@ -20,8 +20,8 @@ passport.use('local',new LocalStrategy({
             return done(null, false, {message: 'Incorrect username.'});
         }
         argon2.hash(password).then((password)=> {
-        if(user.getDataValue('password') !== argon2.hash(password)) {
-            console.log('your passwoerd:'+user.getDataValue('password')+' you entered:');
+        if(user.getDataValue('password') !== password) {
+            console.log('');
             return done(null, false, {message: 'Incorrect password.'});
         }
         })
@@ -32,8 +32,9 @@ passport.use('local',new LocalStrategy({
 
 passport.use('registration', new LocalStrategy({
     usernameField: 'email',
-    passwordField: 'password'
-}, function(email, password, done) {
+    passwordField: 'password',
+    passReqToCallback: true,
+}, function(req, email, password, done) {
     if(!email) {
         return done(null, false, {message: 'email is needed'});
     }
@@ -51,6 +52,7 @@ passport.use('registration', new LocalStrategy({
             argon2.hash(password).then((password) => {
                 console.log('passwd is set');
                 const newUser = new User({
+                    name: req.body.name,
                     email: email,
                     password: password
                 });
@@ -76,7 +78,7 @@ passport.use('cookie', new CookieStrategy({
 }))
 
 passport.serializeUser((user, done) => {
-    console.log('trying to serialize');
+    console.log('trying to serialize '+user.email+' '+user.name);
     done(null, user.id);
 })
 passport.deserializeUser((id, done) => {
