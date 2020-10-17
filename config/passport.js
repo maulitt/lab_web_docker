@@ -19,13 +19,16 @@ passport.use('local',new LocalStrategy({
         if(!user) {
             return done(null, false, {message: 'Incorrect username.'});
         }
-        argon2.hash(password).then((password)=> {
-        if(user.getDataValue('password') !== password) {
-            console.log('');
-            return done(null, false, {message: 'Incorrect password.'});
-        }
-        })
-        return done(null, user);
+        argon2.verify(user.getDataValue('password'), password).then((comparison) => {
+            if(!comparison) {
+                console.log('');
+                return done(null, false, {message: 'Incorrect password.'});
+            }
+            else {
+                return done(null, user);
+            }
+        });
+        //return done(null, user);
     }).catch(err => {console.log(err);});
 }));
 
