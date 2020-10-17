@@ -56,8 +56,11 @@ passport.use('registration', new LocalStrategy({
                     email: email,
                     password: password
                 });
-                newUser.save().then(() => { console.log('user\'s saved '); });
-                return done(null, newUser);
+                newUser.save().then(() => {
+                    console.log('user\'s saved ');
+                    return done(null, newUser);
+                });
+                //return done(null, newUser);
             });
         }
     }).catch((err) => {console.log(err);});
@@ -82,7 +85,7 @@ passport.serializeUser((user, done) => {
     done(null, user.id);
 })
 passport.deserializeUser((id, done) => {
-    console.log('trying to deserialize');
+    console.log('trying to deserialize, my id '+id);
     User.findOne({where: {id: id}}).then( (user) => {
         done(null,user);
     }).catch((err) => {done(err);});

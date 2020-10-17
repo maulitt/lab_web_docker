@@ -16,7 +16,8 @@ const connecting = require('./for_sequelize').connecting;
 app.use(flash());
 app.use(cookieSession({
     name: 'session',
-    keys: ['key1', 'key2']
+    keys: ['key1', 'key2'],
+    maxAge: 20000
 }));
 app.use(cookieParser());
 //чтобы писать пост-реквесты нужны следующие мидлвари
@@ -38,10 +39,7 @@ app.get('/registration', function (req, res) {
     //const flesh = req.flash();
     res.render('registration.hbs', { message: req.flash('error')});
 })
-app.get('/signin', function (req, res) {
-    res.render('signin.hbs');
-    console.log(req.flash());
-})
+
 app.get('/logout', function(req, res) {
     req.logout();
     res.redirect('/');
@@ -50,7 +48,10 @@ app.get('/logout', function(req, res) {
 app.post('/registration', passport.authenticate('registration', { successRedirect: '/',
     failureRedirect: '/registration', failureFlash: true }))
 
-
+app.get('/signin', function (req, res) {
+    res.render('signin.hbs');
+    console.log(req.flash());
+})
 //сайн-ин старых людей
 app.post('/signin', passport.authenticate('local', { successRedirect: '/', failureRedirect: '/signin',
     failureFlash: true }))
