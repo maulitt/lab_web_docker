@@ -8,6 +8,8 @@ services:
       - db
     ports:
       - 3000:3000
+    links:
+      - "db:users"
   db:
     image: postgres
     restart: always
