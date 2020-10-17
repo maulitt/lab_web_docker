@@ -19,9 +19,12 @@ passport.use('local',new LocalStrategy({
         if(!user) {
             return done(null, false, {message: 'Incorrect username.'});
         }
-        if(user.getDataValue('password') !== password) {
+        argon2.hash(password).then((password)=> {
+        if(user.getDataValue('password') !== argon2.hash(password)) {
+            console.log('your passwoerd:'+user.getDataValue('password')+' you entered:');
             return done(null, false, {message: 'Incorrect password.'});
         }
+        })
         return done(null, user);
     }).catch(err => {console.log(err);});
 }));
@@ -73,9 +76,11 @@ passport.use('cookie', new CookieStrategy({
 }))
 
 passport.serializeUser((user, done) => {
+    console.log('trying to serialize');
     done(null, user.id);
 })
 passport.deserializeUser((id, done) => {
+    console.log('trying to deserialize');
     User.findOne({where: {id: id}}).then( (user) => {
         done(null,user);
     }).catch((err) => {done(err);});
