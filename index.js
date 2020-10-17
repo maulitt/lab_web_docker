@@ -53,8 +53,13 @@ app.get('/signin', function (req, res) {
     console.log(req.flash());
 })
 //сайн-ин старых людей
-app.post('/signin', passport.authenticate('local', { successRedirect: '/', failureRedirect: '/signin',
+app.post('/signin', passport.authenticate('local', { successRedirect: '/personal', failureRedirect: '/signin',
     failureFlash: true }))
+app.get('/personal', passport.authenticate('cookie', { failureRedirect: '/signin',
+    failureFlash: true }), function(req, res) {
+    res.render('personalpage.hbs');
+})
+
 
 
 //всякие обработчики маршрутов
