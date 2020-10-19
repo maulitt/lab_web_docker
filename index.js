@@ -57,7 +57,11 @@ app.post('/signin', passport.authenticate('local', { successRedirect: '/personal
     failureFlash: true }))
 app.get('/personal', passport.authenticate('cookie', { failureRedirect: '/signin',
     failureFlash: true }), function(req, res) {
-    res.render('personalpage.hbs');
+    res.render('personalpage.hbs', {
+        name: 'Regina',
+        username: req.user.name,
+        useremail: req.user.email
+    });
 })
 
 
