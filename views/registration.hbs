@@ -2,10 +2,12 @@
 <html lang="en">
 <head>
     <title>Регистрация нового пользователя</title>
+    <link type="text/css" href="../public/css/decoration.css" rel="stylesheet">
 </head>
 <body>
 {{> menu}}
 <form method="post" action="/registration">
+    <div class="registration">
     <p><b>{{message}}</b><br></p>
     <p><b>Ваше имя</b><br>
         <label>
@@ -22,6 +24,7 @@
             <input name="password" type="text" size="40">
         </label>
     </p>
+    </div>
     <p><input type="submit" value="Send"></p>
 </form>
 {{> footer}}

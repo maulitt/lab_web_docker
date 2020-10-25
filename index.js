@@ -12,6 +12,7 @@ const cookieParser = require('cookie-parser');
 require('passport-local');
 const connecting = require('./for_sequelize').connecting;
 
+app.use(express.static('public'));
 
 app.use(flash());
 app.use(cookieSession({
@@ -27,7 +28,10 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 app.set('view engine', 'hbs');
 app.set('views', 'views');
-hbs.registerPartials(__dirname+'/views/partials')
+hbs.registerPartials(__dirname+'/views/partials');
+
+
+//css ----------- ????????
 
 
 app.use(passport.initialize());

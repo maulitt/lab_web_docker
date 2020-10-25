@@ -2,10 +2,12 @@
 <html lang="en">
 <head>
     <title>Вход</title>
+    <link type="text/css" href="../public/css/decoration.css" rel="stylesheet">
 </head>
 <body>
 {{> menu}}
-<form method="post" action="/signin">  //
+<form method="post" action="/signin">
+    <div class="login">
     <p><b>Ваш логин (e-mail)</b><br>
         <label>
             <input name="email" type="text" size="40">
@@ -16,6 +18,7 @@
             <input name="password" type="text" size="40">
         </label>
     </p>
+    </div>
     <p><input type="submit" value="Send"></p>
 </form>
 {{> footer}}

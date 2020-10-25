@@ -1,0 +1,55 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: fantasy, sans-serif;
+    background-image: url("c3uhsgo1vx541.png");
+    color: white;
+    text-align:  center;
+}
+
+nav {
+    color: black;
+    background: white;
+    height: 30px;
+}
+
+input[type = text] {
+    background-color: white;
+    color: white;
+    border: 2px solid grey;
+    border-radius: 4px;
+    width: 15%;
+}
+
+.menu{
+    font-size: 40px;
+    text-align:  center;
+}
+
+.footer{
+    font-size: 10px;
+    /*text-align:  center;*/
+}
+
+.personal{
+    font-size: 20px;
+    text-align:  center;
+}
+
+.title{
+    font-size: 30px;
+    text-align:  center;
+}
+
+.login{
+    font-size: 20px;
+    text-align:  center;
+}
+
+.registration{
+    font-size: 20px;
+    text-align:  center;
+}
