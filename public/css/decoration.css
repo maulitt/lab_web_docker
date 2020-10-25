@@ -5,15 +5,16 @@
 
 body {
     font-family: fantasy, sans-serif;
-    background-image: url("c3uhsgo1vx541.png");
+    background-image: url("picture.jpg");
+    background-position: center center;
     color: white;
     text-align:  center;
 }
 
 nav {
-    color: black;
-    background: white;
-    height: 30px;
+    color: antiquewhite;
+    /*background: white;*/
+    height: 20px;
 }
 
 input[type = text] {
@@ -25,12 +26,16 @@ input[type = text] {
 }
 
 .menu{
-    font-size: 40px;
+    font: menu;
+    color: antiquewhite;
+    font-size: 20px;
     text-align:  center;
 }
 
 .footer{
-    font-size: 10px;
+    bottom: 10px;
+    font-size: 20px;
+    /*vertical-align: bottom;*/
     /*text-align:  center;*/
 }
 
@@ -47,9 +52,11 @@ input[type = text] {
 .login{
     font-size: 20px;
     text-align:  center;
+    top: 80px;
 }
 
 .registration{
+    top: 80px;
     font-size: 20px;
     text-align:  center;
 }
