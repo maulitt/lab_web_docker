@@ -12,7 +12,7 @@ const cookieParser = require('cookie-parser');
 require('passport-local');
 const connecting = require('./for_sequelize').connecting;
 
-app.use(express.static('public'));
+app.use(express.static(__dirname+'public'));
 
 app.use(flash());
 app.use(cookieSession({
