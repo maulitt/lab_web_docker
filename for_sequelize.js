@@ -8,7 +8,7 @@ const sequelize = new Sequelize('users', 'regina', 'qwerty', {
 async function connecting() {
     try {
         await sequelize.authenticate();
-        console.log('Connection has been established successfully.');
+        console.log('Connection has been established successfullyyyyyy.');
     } catch (error) {
         console.error('Unable to connect to the database:', error);
     }
