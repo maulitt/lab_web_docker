@@ -53,12 +53,15 @@ app.post('/registration', passport.authenticate('registration', { successRedirec
     failureRedirect: '/registration', failureFlash: true }))
 
 app.get('/signin', function (req, res) {
-    res.render('signin.hbs');
+    res.render('signin.hbs', {
+        message: req.flash('error')
+    });
     console.log(req.flash());
 })
 //сайн-ин старых людей
 app.post('/signin', passport.authenticate('local', { successRedirect: '/personal', failureRedirect: '/signin',
     failureFlash: true }))
+
 app.get('/personal', passport.authenticate('cookie', { failureRedirect: '/signin',
     failureFlash: true }), function(req, res) {
     res.render('personalpage.hbs', {

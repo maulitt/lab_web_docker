@@ -76,11 +76,16 @@ passport.use('cookie', new CookieStrategy({
 }, function(req, session, done) {
     console.log('it\'s cookie strategy');
     //console.log(req.user.email + ' ' + req.user.password);
+    if(req.user) {
     User.findOne({where: { email: req.user.email }}).then( (user) => {
         //if(err) { return done(err); }
-        if (!user) { return done(null, false); }
+        if (!user) { return done(null, false, { message: 'You tried to get access without authorization(.'}); }
         return done(null, user);
     }).catch((err) => {console.log(err);});
+    }
+    else {
+        return done(null, false, { message: 'You tried to get access without authorization(.'});
+    }
 }))
 
 passport.serializeUser((user, done) => {

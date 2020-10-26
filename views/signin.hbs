@@ -8,11 +8,12 @@
 {{> menu}}
 <form method="post" action="/signin">
     <div class="login">
-    <p><b>Ваш логин (e-mail)</b><br>
-        <label>
-            <input name="email" type="text" size="40">
-        </label>
-    </p>
+        <p>{{message}}</p>
+        <p><b>Ваш логин (e-mail)</b><br>
+           <label>
+              <input name="email" type="text" size="40">
+           </label>
+        </p>
     <p><b>Пароль</b><br>
         <label>
             <input name="password" type="text" size="40">
