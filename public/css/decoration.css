@@ -1,10 +1,10 @@
 * {
-    margin: 0;
-    padding: 0;
+    margin: 10px;
+    padding: 10px;
 }
 
 body {
-    font-family: fantasy, sans-serif;
+    font-family: sans-serif;
     background-image: url("picture.jpg");
     background-position: center center;
     color: white;
@@ -13,13 +13,15 @@ body {
 
 nav {
     color: antiquewhite;
+    padding: 0;
+    text-decoration: none;
     /*background: white;*/
     height: 20px;
 }
 
 input[type = text] {
     background-color: white;
-    color: white;
+    color: darkslateblue;
     border: 2px solid grey;
     border-radius: 4px;
     width: 15%;
@@ -27,20 +29,29 @@ input[type = text] {
 
 .menu{
     font: menu;
+    text-decoration: none;
     color: antiquewhite;
     font-size: 20px;
     text-align:  center;
 }
 
+menu a {
+    text-decoration: none;
+}
+
 .footer{
+    position: absolute;
+    right: 10px;
     bottom: 10px;
+    font-family: cursive;
     font-size: 20px;
     /*vertical-align: bottom;*/
     /*text-align:  center;*/
 }
 
 .personal{
-    font-size: 20px;
+    font-size: 30px;
+    vertical-align: center;
     text-align:  center;
 }
 
@@ -51,12 +62,13 @@ input[type = text] {
 
 .login{
     font-size: 20px;
+    vertical-align: center;
     text-align:  center;
-    top: 80px;
+    top: 300px;
 }
 
 .registration{
-    top: 80px;
+    top: 200px;
     font-size: 20px;
     text-align:  center;
 }
