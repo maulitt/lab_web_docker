@@ -4,16 +4,21 @@ services:
   web_app:
     build: .
     command: node index.js
-    depends_on:
-      - db
     ports:
       - 3000:3000
-    links:
-      - "db:db"
+    depends_on:
+      - db
+    networks:
+      - new
   db:
     image: postgres
-    restart: always
+    networks:
+      new:
+        aliases:
+          - database
     environment:
       - POSTGRES_PASSWORD=qwerty
       - POSTGRES_USER=regina
       - POSTGRES_DB=users
+networks:
+  new:
