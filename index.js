@@ -94,8 +94,19 @@ app.delete('/resource', passport.authenticate('cookie', {
     failureRedirect: '/signin',
     failureFlash: true
 }), (req, res) => {
-    if(req.user.email == 'admin') {
-        User.delete
+    if(req.user.email === 'admin') {
+        User.destroy({
+            where: {
+                id: req.query.id
+            }
+        }).then(() => {
+            res.json({ succeded: true });
+        }).catch(err => {
+                res.json({ succeded: false, error: err });
+            })
+    }
+    else {
+        res.json({ succeded: false, error: 'you\'re not an admin! ' });
     }
 })
 
