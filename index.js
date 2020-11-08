@@ -11,6 +11,10 @@ const cookieParser = require('cookie-parser');
 require('passport-local');
 const connecting = require('./for_sequelize').connecting;
 
+//     экспериментально!  удалить, когда всё сломается!!!!!
+const User = require('./models/user')(sequelize, Sequelize);
+
+
 app.use(express.static(__dirname+'/public'));
 
 app.use(flash());
@@ -35,7 +39,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-//                    было
+//                        было
 app.get('/registration', function (req, res) {
     //res.render('registration.hbs', { message: req.flash('error')});
 })
@@ -75,8 +79,14 @@ app.get('/resource', passport.authenticate('local', {
 }), (req, res) => {
     res.json({ succeeded: true });
 })
-app.put('/resource', (req, res) => {
-
+app.put('/resource', (req, res, next) => {
+    User.update(
+        { name: req.user.name, email: req.user.email },
+        { where: req.user.id }
+    ).then( (updatedField) => {
+        res.json(updatedField)
+    })
+        .catch(next)
 })
 
 
