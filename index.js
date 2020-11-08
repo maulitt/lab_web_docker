@@ -79,16 +79,25 @@ app.get('/resource', passport.authenticate('local', {
 }), (req, res) => {
     res.json({ succeeded: true });
 })
-app.put('/resource', (req, res, next) => {
+app.put('/resource', passport.authenticate('cookie', {
+    failureRedirect: '/signin',
+    failureFlash: true
+}), (req, res, next) => {
     User.update(
         { name: req.user.name, email: req.user.email },
         { where: req.user.id }
     ).then( (updatedField) => {
         res.json(updatedField)
-    })
-        .catch(next)
+    }).catch(next);
 })
-
+app.delete('/resource', passport.authenticate('cookie', {
+    failureRedirect: '/signin',
+    failureFlash: true
+}), (req, res) => {
+    if(req.user.email == 'admin') {
+        User.delete
+    }
+})
 
 
 //мидлвари для ошибок
