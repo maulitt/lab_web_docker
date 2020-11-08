@@ -2,11 +2,10 @@ const express = require('express');
 const app = express();
 const PORT = 3000;
 const bodyParser = require('body-parser');
-const hbs = require('hbs');
+//const hbs = require('hbs');
 const flash = require('connect-flash');
 const passport = require('./config/passport').passport;
 const fs = require('fs');
-//const argon2 = require('argon2');
 const cookieSession = require('cookie-session');
 const cookieParser = require('cookie-parser');
 require('passport-local');
@@ -26,59 +25,58 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
 
-app.set('view engine', 'hbs');
-app.set('views', 'views');
-hbs.registerPartials(__dirname+'/views/partials');
+//app.set('view engine', 'hbs');
+//app.set('views', 'views');
+//hbs.registerPartials(__dirname+'/views/partials');
 
-
-//css ----------- ????????
 
 
 app.use(passport.initialize());
 app.use(passport.session());
 
 
-
+//                    было
 app.get('/registration', function (req, res) {
-    //const flesh = req.flash();
-    res.render('registration.hbs', { message: req.flash('error')});
+    //res.render('registration.hbs', { message: req.flash('error')});
 })
-
 app.get('/logout', function(req, res) {
     req.logout();
     res.redirect('/');
 })
-//регистрация новых людей
 app.post('/registration', passport.authenticate('registration', { successRedirect: '/',
     failureRedirect: '/registration', failureFlash: true }))
-
 app.get('/signin', function (req, res) {
-    res.render('signin.hbs', {
-        message: req.flash('error')
-    });
+    //res.render('signin.hbs', { message: req.flash('error') });
     console.log(req.flash());
 })
-//сайн-ин старых людей
 app.post('/signin', passport.authenticate('local', { successRedirect: '/personal', failureRedirect: '/signin',
     failureFlash: true }))
 
 app.get('/personal', passport.authenticate('cookie', { failureRedirect: '/signin',
     failureFlash: true }), function(req, res) {
-    res.render('personalpage.hbs', {
-        name: 'Regina',
-        username: req.user.name,
-        useremail: req.user.email
-    });
+    //res.render('personalpage.hbs', { name: 'Regina', username: req.user.name, useremail: req.user.email });
+})
+app.get('/', function (req, res) {
+    //res.render('mainpage.hbs', { title: 'Главная страница приложения', name: 'Регины'})
 })
 
 
+//                       стало
+app.post('/resource', passport.authenticate('registration', {
+    successRedirect: '/',
+    failureRedirect: '/registration',
+    failureFlash: true }), (req, res) => {
+    res.json({ succeeded: true } );
+})
+app.get('/resource', passport.authenticate('local', {
+    successRedirect: '/personal',
+    failureRedirect: '/signin',
+    failureFlash: true
+}), (req, res) => {
+    res.json({ succeeded: true });
+})
+app.put('/resource', (req, res) => {
 
-//всякие обработчики маршрутов
-app.get('/', function (req, res) {
-    res.render('mainpage.hbs', {
-        title: 'Главная страница приложения',
-        name: 'Регины'
-    })
 })
 
 
