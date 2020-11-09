@@ -92,13 +92,13 @@ app.post('/login', passport.authenticate('local', {
 }), (req, res) => {
     res.json({ succeeded: true });
 })
-app.put('/resource', passport.authenticate('cookie', {
+app.put('/resource', passport.authenticate('local', {
     failureRedirect: '/signin',
     failureFlash: true
 }), (req, res, next) => {
     User.update(
         { name: req.query.name },
-        { where: req.user.id }
+        { where: { email: req.body.email } }
     ).then( (updatedField) => {
         res.json(updatedField)
     }).catch(next);
