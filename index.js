@@ -40,6 +40,15 @@ hbs.registerPartials(__dirname+'/views/partials');
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(logToConsole);
+
+app.options("/*", function(req, res, next){
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+    res.sendStatus(200);
+});
+
 
 //                        было
 app.get('/registration', function (req, res) {
@@ -69,30 +78,40 @@ app.get('/', function (req, res) {
 
 
 
+
+
+
 //                       стало
-app.get('/proverka', (req, res) => {
+app.get('/api/proverka', (req, res) => {
+    //res.redirect('http://localhost:8080/register');   //  редирект должен быть на бэке или фронте?
     res.send({ success: true });
 })
-app.get('/resource', passport.authenticate('cookie', {
+app.get('/api/resource', passport.authenticate('cookie', {
     failureRedirect: '/signin',
     failureFlash: true
 }),(req, res) => {
     res.send({ success: true , resp: req.user.name });
 })
-app.post('/resource', passport.authenticate('registration', {
-    successRedirect: '/',
-    failureRedirect: '/registration',
+//регистрация
+app.post('/api/resource', passport.authenticate('registration', {
+    //successRedirect: '/',
+    //failureRedirect: '/registration',
     failureFlash: true }), (req, res) => {
-    res.json({ succeeded: true } );
+    console.log("this is post-handler for regi");
+    res.send({ success: true , message: req.flash('error')}); // ----------experiment
 })
-app.post('/login', passport.authenticate('local', {
-    successRedirect: '/personal',
-    failureRedirect: '/login',
-    failureFlash: true
-}), (req, res) => {
-    res.json({ succeeded: true });
+
+//авторизация
+app.post('/api/login', passport.authenticate('local', {
+    //successRedirect: '/personal',
+    //failureRedirect: '/login',
+    failureFlash: true }), (req, res) => {
+    res.send({ success: true, message: req.flash('error') });
 })
-app.put('/resource', passport.authenticate('local', {
+
+
+
+app.put('/api/resource', passport.authenticate('local', {
     failureRedirect: '/signin',
     failureFlash: true
 }), (req, res, next) => {
@@ -103,7 +122,7 @@ app.put('/resource', passport.authenticate('local', {
         res.json(updatedField)
     }).catch(next);
 })
-app.delete('/resource', passport.authenticate('cookie', {
+app.delete('/api/resource', passport.authenticate('cookie', {
     failureRedirect: '/signin',
     failureFlash: true
 }), (req, res) => {
@@ -113,17 +132,15 @@ app.delete('/resource', passport.authenticate('cookie', {
                 id: req.query.id
             }
         }).then(() => {
-            res.json({ succeded: true });
+            res.json({ success: true });
         }).catch(err => {
-                res.json({ succeded: false, error: err });
+                res.json({ success: false, error: err });
             })
     }
     else {
-        res.json({ succeded: false, error: 'you\'re not an admin! ' });
+        res.json({ success: false, error: 'you\'re not an admin! ' });
     }
 })
-
-
 //мидлвари для ошибок
 app.use(function(req, res, next) {       // ошибка 404 обрабатывается по-особенному 0_о
     const err = new Error('Not Found');
@@ -162,3 +179,10 @@ app.listen(PORT,() => {
         console.log(err);
     });
 } );
+
+function logToConsole(req, res, next) {
+    let date = new Date();
+    let data = `${date} ${req.method} request at ${req.url}`;
+    console.log(data);
+    next();
+}

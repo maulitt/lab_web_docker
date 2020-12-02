@@ -21,7 +21,7 @@ passport.use('local',new LocalStrategy({
         }
         argon2.verify(user.getDataValue('password'), password).then((comparison) => {
             if(!comparison) {
-                console.log('');
+                console.log('wrong password');
                 return done(null, false, {message: 'Incorrect password.'});
             }
             else {
@@ -38,14 +38,14 @@ passport.use('registration', new LocalStrategy({
     passwordField: 'password',
     passReqToCallback: true,
 }, function(req, email, password, done) {
-    if(!email) {
-        return done(null, false, {message: 'email is needed'});
-    }
-    if(!password) {
-        return done(null, false, {message: 'password is needed'});
-    }
+    console.log('this is regis strategy');
+    //if(!email) {
+      //  return done(null, false, {message: 'email is needed'});
+    //}
+    //if(!password) {
+      //  return done(null, false, {message: 'password is needed'});
+    //}
     User.findOne( {where: { email: email }}).then( (user) => {
-        //if(err) {throw err;}
         if(user) {
             console.log('user is used');
             return done(null, false, { message: 'Email is used by smn else.'});
@@ -66,7 +66,7 @@ passport.use('registration', new LocalStrategy({
                 //return done(null, newUser);
             });
         }
-    }).catch((err) => {console.log(err);});
+    }).catch((err) => {console.log(err); return done(null, false, { message: 'Error occurred. Try later.'});});
 }))
 
 
