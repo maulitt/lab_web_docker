@@ -15,7 +15,7 @@ const connecting = require('./for_sequelize').connecting;
 const sequelize = require('./for_sequelize').sequelize;
 const Sequelize = require('sequelize');
 const User = require('./models/user')(sequelize, Sequelize);
-
+const Article = require('./models/articles')(sequelize, Sequelize);
 
 app.use(express.static(__dirname+'/public'));
 
@@ -92,25 +92,35 @@ app.get('/api/resource', passport.authenticate('cookie', {
 }),(req, res) => {
     res.send({ success: true , resp: req.user.name });
 })
+
 //регистрация
 app.post('/api/resource', passport.authenticate('registration', {
     //successRedirect: '/',
-    //failureRedirect: '/registration',
+    failureRedirect: '/api/error',
     failureFlash: true }), (req, res) => {
     console.log("this is post-handler for regi");
-    res.send({ success: true , message: req.flash('error')}); // ----------experiment
+    res.send({ success: true , message: 'okey'}); // ----------experiment
 })
 
 //авторизация
 app.post('/api/login', passport.authenticate('local', {
     //successRedirect: '/personal',
-    //failureRedirect: '/login',
-    failureFlash: true }), (req, res) => {
-    res.send({ success: true, message: req.flash('error') });
+    failureRedirect: '/api/error',
+    failureFlash: true
+}), (req, res) => {
+    res.send({ success: true, message: 'fine' });
+})
+app.get('/api/error', (req, res)=> {
+    res.send({message: req.flash('error')});
 })
 
 
+// для работы с таблицей статьи
 
+
+
+
+//обновление и удаление
 app.put('/api/resource', passport.authenticate('local', {
     failureRedirect: '/signin',
     failureFlash: true
@@ -141,11 +151,13 @@ app.delete('/api/resource', passport.authenticate('cookie', {
         res.json({ success: false, error: 'you\'re not an admin! ' });
     }
 })
+
+
 //мидлвари для ошибок
 app.use(function(req, res, next) {       // ошибка 404 обрабатывается по-особенному 0_о
     const err = new Error('Not Found');
     err.statusCode = 404;
-    res.send('What?');
+    res.send({message: 'What?'});
     next(err);
 });
 
