@@ -108,7 +108,10 @@ app.get('/api/cookiecheck', passport.authenticate('cookie', {
     res.send({ message: 'okey'});
 })
 
-
+//экспериментальный обработчик, чтобы отправлять все данные таблицы !!! ОСТОРОЖНО !!!
+app.get('/api/articles', async (req, res) => {
+    res.send(JSON.stringify(await Article.findAll()));
+})
 
 
 //авторизация
