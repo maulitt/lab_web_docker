@@ -39,12 +39,6 @@ passport.use('registration', new LocalStrategy({
     passReqToCallback: true,
 }, function(req, email, password, done) {
     console.log('this is regis strategy');
-    //if(!email) {
-      //  return done(null, false, {message: 'email is needed'});
-    //}
-    //if(!password) {
-      //  return done(null, false, {message: 'password is needed'});
-    //}
     User.findOne( {where: { email: email }}).then( (user) => {
         if(user) {
             console.log('user is used');

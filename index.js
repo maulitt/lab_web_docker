@@ -83,7 +83,6 @@ app.get('/', function (req, res) {
 
 //                       стало
 app.get('/api/proverka', (req, res) => {
-    //res.redirect('http://localhost:8080/register');   //  редирект должен быть на бэке или фронте?
     res.send({ success: true });
 })
 app.get('/api/resource', passport.authenticate('cookie', {
@@ -95,28 +94,59 @@ app.get('/api/resource', passport.authenticate('cookie', {
 
 //регистрация
 app.post('/api/resource', passport.authenticate('registration', {
-    //successRedirect: '/',
     failureRedirect: '/api/error',
     failureFlash: true }), (req, res) => {
     console.log("this is post-handler for regi");
     res.send({ success: true , message: 'okey'}); // ----------experiment
 })
 
+
+//cookie-check for adding news
+app.get('/api/cookiecheck', passport.authenticate('cookie', {
+    failureRedirect: '/api/error',
+    failureFlash: true }), (req, res) => {
+    res.send({ message: 'okey'});
+})
+
+
+
+
 //авторизация
 app.post('/api/login', passport.authenticate('local', {
-    //successRedirect: '/personal',
     failureRedirect: '/api/error',
-    failureFlash: true
-}), (req, res) => {
+    failureFlash: true}), (req, res) => {
     res.send({ success: true, message: 'fine' });
 })
+
+//отправка сообщения об ошибке
 app.get('/api/error', (req, res)=> {
     res.send({message: req.flash('error')});
 })
 
 
 // для работы с таблицей статьи
-
+app.post('/api/add', passport.authenticate('cookie',{
+    failureRedirect: '/api/error',
+    failureFlash: true}), (req, res) => {
+    Article.findOne( {where: {title: req.body.title} })
+        .then(function(article) {
+            if(article) {
+                res.send({message : 'This title\'s already been added'});
+            }
+            else {
+                const newArticle = new Article({
+                    author: req.body.author,
+                    title: req.body.title,
+                    preview: req.body.preview,
+                    text: req.body.text
+                });
+                newArticle.save().then(() => {
+                    res.send({message: 'Saved successfully'});
+                })
+            }
+        })
+        .catch((err) => {console.log(err); res.send({message: 'some error occurred, try again later'})});
+})
 
 
 
