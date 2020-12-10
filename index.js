@@ -138,7 +138,7 @@ app.post('/api/add', passport.authenticate('cookie',{
             }
             else {
                 const newArticle = new Article({
-                    author: req.body.author,
+                    author: req.user.name,
                     title: req.body.title,
                     preview: req.body.preview,
                     text: req.body.text
@@ -149,6 +149,13 @@ app.post('/api/add', passport.authenticate('cookie',{
             }
         })
         .catch((err) => {console.log(err); res.send({message: 'some error occurred, try again later'})});
+})
+
+//экперимент : проверка на админа
+app.get('/api/isadmin', passport.authenticate('cookie', {
+    failureRedirect: '/api/error',
+    failureFlash: true}), (req, res) => {
+    res.send({message: req.user.name});
 })
 
 
@@ -182,6 +189,27 @@ app.delete('/api/resource', passport.authenticate('cookie', {
     }
     else {
         res.json({ success: false, error: 'you\'re not an admin! ' });
+    }
+})
+
+//эксперимент -- удалять записи из таблицы сос татьями
+app.delete('/api/delete', passport.authenticate('cookie', {
+    failureRedirect: '/api/error',
+    failureFlash: true
+}), (req, res) => {
+    if(req.user.email === 'admin') {
+        Article.destroy({
+            where: {
+                title: req.body.title
+            }
+        }).then(() => {
+            res.send({message: 'Success!'});
+        }).catch(err => {
+            res.send({message: err});
+        })
+    }
+    else {
+        res.send({message: 'You\'re not an admin.'});
     }
 })
 
