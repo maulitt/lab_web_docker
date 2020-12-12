@@ -10,7 +10,7 @@ const cookieSession = require('cookie-session');
 const cookieParser = require('cookie-parser');
 require('passport-local');
 const connecting = require('./for_sequelize').connecting;
-
+const { Op } = require('sequelize');
 //     экспериментально!  удалить, когда всё сломается!!!!!
 const sequelize = require('./for_sequelize').sequelize;
 const Sequelize = require('sequelize');
@@ -112,6 +112,12 @@ app.get('/api/cookiecheck', passport.authenticate('cookie', {
 app.get('/api/articles', async (req, res) => {
     res.send(JSON.stringify(await Article.findAll()));
 })
+
+//удалить, когда успокоюсь уже и смирюсь
+app.get('/api/findarticles', async (req, res) => {
+    res.send(JSON.stringify(await Article.findAll({where: {title: { [Op.like]: req.query.title} }})));
+})
+
 
 
 //авторизация
