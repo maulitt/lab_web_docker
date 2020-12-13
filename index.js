@@ -119,7 +119,6 @@ app.get('/api/findarticles', async (req, res) => {
 })
 
 
-
 //авторизация
 app.post('/api/login', passport.authenticate('local', {
     failureRedirect: '/api/error',
@@ -161,9 +160,8 @@ app.post('/api/add', passport.authenticate('cookie',{
 app.get('/api/isadmin', passport.authenticate('cookie', {
     failureRedirect: '/api/error',
     failureFlash: true}), (req, res) => {
-    res.send({message: req.user.name});
+    res.send({message: req.user.email});
 })
-
 
 
 //обновление и удаление
