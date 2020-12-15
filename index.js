@@ -206,8 +206,9 @@ app.delete('/api/delete', passport.authenticate('cookie', {
             where: {
                 title: req.body.title
             }
-        }).then(() => {
-            res.send({message: 'Success!'});
+        }).then((result) => {
+            if(result){res.send({message: 'Success!'});}
+            else {res.send({message: "Not Found!"})}  ////__________________________________________!!!!!!!!!!!!!
         }).catch(err => {
             res.send({message: err});
         })
